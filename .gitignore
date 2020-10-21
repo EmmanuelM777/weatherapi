@@ -4,6 +4,11 @@ project.lock.json
 .DS_Store
 *.pyc
 
+# Terraform
+.terraform
+terraform.tfstate
+terraform.tfstate.backup
+
 # Visual Studio Code
 .vscode
 
