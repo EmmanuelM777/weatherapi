@@ -1,7 +1,7 @@
 # Configure the Azure Provider
 provider "azurerm" {
   # whilst the `version` attribute is optional, we recommend pinning to a given version of the Provider
-  version             = "=2.5.0"
+  version             = "2.5.0"
   subscription_id     = "e8a813aa-c853-4740-aefd-16d60c38dbf7"
   features {}
 }
