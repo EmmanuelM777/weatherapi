@@ -1,7 +1,7 @@
 # Terrafom Infrastructure as code definition
 
 # variables
-variable name "imagebuild" {
+variable "imagebuild" {
   type        = string
   description = "build number"
 }
