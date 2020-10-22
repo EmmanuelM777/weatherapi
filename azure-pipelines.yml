@@ -2,6 +2,7 @@
 # Build a Docker image 
 # https://docs.microsoft.com/azure/devops/pipelines/languages/docker
 
+# The branch that will trigger the build when code is commited to it
 trigger:
 - main
 
@@ -9,18 +10,20 @@ resources:
 - repo: self
 
 variables:
+  # A tag to track the build number
   tag: '$(Build.BuildId)'
 
 stages:
+# Name of the stage  
 - stage: Build
-  displayName: Build image
+  displayName: Build Docker image
   jobs:  
   - job: Build
     displayName: Build
     pool:
       vmImage: 'ubuntu-latest'
     steps:
-    
+      
     - task: Docker@2
       inputs:
         containerRegistry: 'Emmanuel Docker Hub'
@@ -29,3 +32,31 @@ stages:
         Dockerfile: '**/Dockerfile'
         tags: |
           $(tag)
+
+# Name of the stage  
+- stage: Provision
+  displayName: 'Terraforming on Azure'
+  # Which stage this stage depends on (won't run until dependant stage is successfull)
+  dependsOn: Build
+  jobs:
+  # Job name
+  - job: Provision
+    displayName: 'Provision container instance'
+    pool:
+      vmImage: 'ubuntu-latest'
+    # The name of the library in Azure devops that holds the service principle variables
+    variables:
+      - group: 'Terraform Service Principle Variables'
+    steps:
+      - script: |
+          set -e
+
+          terraform init -input=false
+          terraform apply -input=false -auto-approve
+        name: 'Run Terraform'
+        displayName: 'Run Terraform'
+        env: 
+          ARM_CLIENT_ID: $(ARM_CLIENT_ID)
+          ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
+          ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
+          ARM_TENANT_ID: $(ARM_TENANT_ID)
