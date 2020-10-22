@@ -60,3 +60,6 @@ stages:
           ARM_CLIENT_SECRET: $(ARM_CLIENT_SECRET)
           ARM_SUBSCRIPTION_ID: $(ARM_SUBSCRIPTION_ID)
           ARM_TENANT_ID: $(ARM_TENANT_ID)
+          # Set up a terraform variable to pass the build number to main.tf
+          # (the substring after TF_VAR_ will be the variable name accessible in main.tf)
+          TF_VAR_imagebuild: $(tag)

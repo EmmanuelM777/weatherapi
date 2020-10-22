@@ -1,5 +1,11 @@
 # Terrafom Infrastructure as code definition
 
+# variables
+variable name "imagebuild" {
+  type        = string
+  description = "build number"
+}
+
 # Configure the Azure Provider
 provider "azurerm" {
   # whilst the `version` attribute is optional, we recommend pinning to a given version of the Provider
@@ -52,7 +58,7 @@ resource "azurerm_container_group" "container_group1" {
     # The name of the Container instance resource in Azure
     name          = "weatherapi"
     # Name of the image in Docker Hub to load into the Azure container
-    image         = "emmanuelm777/weatherapi"
+    image         = "emmanuelm777/weatherapi:${var.imagebuild}"
     cpu           = "1"
     memory        = "1"
 
